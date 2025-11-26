@@ -1,17 +1,13 @@
 const express = require('express');
-const { getAllProducts } = require('../controllers/productController');
+const { productController } = require('../controllers/productController');
+const { productValidations } = require('../validations/productValidatiors');
+const validationErrorHandler = require('../middleware/validationErrorHandler');
 const router = express.Router();
 
 
-router.get('/', getAllProducts);
-
-
-
-
-router.get('/:id', (req, res) => {
-    const productId = req.params.id;
-    res.send(`Product Details for ID: ${productId}`);
-});
+router.get('/',productValidations.getAllProductsValidatior,  productController.getAll);
+router.get('/:id', productValidations.getByIdProductValidatior, validationErrorHandler, productController.getById);
+router.post('/', productController.create);
 
 module.exports = router;
 
