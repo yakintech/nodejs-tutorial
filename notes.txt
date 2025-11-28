@@ -1,0 +1,2 @@
+* locale lowercase
+* getall endpoint sorunu 

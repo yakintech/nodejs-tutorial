@@ -2,7 +2,9 @@ const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
     name: {
-        type: String
+        type: String,
+        trim: true,
+        lowercase: true
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
