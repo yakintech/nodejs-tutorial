@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema(
     {
         userName: String,
         email: String,
-        password: String, // Parola hashlenmiş olarak saklanmalıdır
+        password: String
     },
     { timestamps: true }
 );
