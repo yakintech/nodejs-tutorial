@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 
 const routes = require('./src/routes/index');
 const connectDB = require('./src/config/db');
+const User = require('./src/models/User');
 
 app.use(express.json());
 app.use(limiter({
@@ -23,7 +24,7 @@ connectDB();
 
 
 
-const secretKey = "loremipsumdolorsitametloremipsumdolorsitametloremipsumdolorsitamet";
+const secretKey = process.env.SECRET_KEY
 
 app.use((req, res, next) => {
     if (req.path === "/login" || req.path.startsWith("/api/categories")) {
@@ -52,21 +53,22 @@ app.use('/api', routes);
 
 
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
     const { username, password } = req.body;
 
-    if (username === "admin" && password === "123") {
+   let user = await User.findOne({ userName: username });
 
-        const token = jwt.sign(
-            { name: username, country: "Türkiye" },
-            secretKey,
-            {
-                expiresIn: "1h",
-                algorithm: "HS256"
-            }
-        );
-        return res.json({ token });
-    }
+   if (!user || user.password !== password) {
+       return res.status(401).json({ message: "Invalid credentials" });
+   }
+
+   const token = jwt.sign(
+       { id: user._id, userName: user.userName },
+       secretKey,
+       { expiresIn: "1h" }
+   );
+
+   res.json({ token });
 })
 
 
