@@ -6,7 +6,6 @@ const Product = require("../models/Product");
 const productController = {
     getAll: async (req, res) => {
 
-
         let columns = req.query.columns
 
         let page = Number(req.query.page) || 1
